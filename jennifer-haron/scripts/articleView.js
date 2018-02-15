@@ -3,8 +3,8 @@ const fadeInSpeed = 750;
 // REVIEW: Configure an object to hold all of our functions for dynamic updates and article-related event handlers.
 let articleView = {};
 
-articleView.populateFilters = function() {
-  $('article').each(function() {
+articleView.populateFilters = function () {
+  $('article').each(function () {
     // REVIEW: We can declare several variables at once and assign their values later when using let. Keep in mind that we cannot do this with const.
     let authorName, category, optionTag;
     if (!$(this).hasClass('template')) {
@@ -34,21 +34,20 @@ articleView.populateFilters = function() {
   });
 };
 
-articleView.handleAuthorFilter = function() {
-  $('#author-filter').on('change', function() {
+articleView.handleAuthorFilter = function () {
+  $('#author-filter').on('change', function () {
     // REVIEW: Inside this function, "this" is the element that triggered the event handler function we are defining. "$(this)" is using jQuery to select that element (analogous to event.target that we have seen before), so we can chain jQuery methods onto it.
     if ($(this).val()) {
       // DONE: If the <select> menu was changed to an option that has a value, we first need to hide all the articles, and then show just the ones that match for the author that was selected.
       // Use an "attribute selector" to find those articles, and fade them in for the reader.
 
       let $currentAuthor = $(this).val();
-      console.log('currentAuthor: ' + $currentAuthor);
 
       $('article').hide();
       $('article[data-author="' + $currentAuthor + '"]').fadeIn(fadeInSpeed);
 
     } else {
-      // TODO: If the <select> menu was changed to an option that is blank, we should first show all the articles, except the one article we are using as a template.
+      // DONE: If the <select> menu was changed to an option that is blank, we should first show all the articles, except the one article we are using as a template.
       $('article').fadeIn(fadeInSpeed);
       $('article.template').hide();
 
@@ -57,16 +56,34 @@ articleView.handleAuthorFilter = function() {
   });
 };
 
-articleView.handleCategoryFilter = function() {
-  // TODO: Just like we do for #author-filter above, we should handle change events on the #category-filter element.
-  // When an option with a value is selected, hide all the articles, then reveal the matches.
-  // When the blank (default) option is selected, show all the articles, except for the template.
-  // Be sure to reset the #author-filter while you are at it!
+articleView.handleCategoryFilter = function () {
+  $('#category-filter').on('change', function () {
 
+    // DONE: Just like we do for #author-filter above, we should handle change events on the #category-filter element.
+    // When an option with a value is selected, hide all the articles, then reveal the matches. 
+    if ($(this).val()) {
+      let $currentCat = $(this).val();
+      $('article').hide();
+      $('article[data-category="' + $currentCat + '"]').fadeIn(fadeInSpeed);
+    } else {
+      $('article').fadeIn(fadeInSpeed);
+      $('article.template').hide();
+
+      // When the blank (default) option is selected, show all the articles, except for the template.
+
+    }
+    $('#author-filter').val('');
+    // Be sure to reset the #author-filter while you are at it!
+  });
 };
 
-articleView.handleMainNav = function() {
-  // TODO: Add an event handler to .main-nav elements that will power the Tabs feature.
+articleView.handleMainNav = function () {
+  // DONE: Add an event handler to .main-nav elements that will power the Tabs feature.
+  $('.main-nav .tab').on('click', function() {
+    $('.tab-content').hide();
+    let $currentTab = $(this).data('content');
+    $('section#' + $currentTab).fadeIn(fadeInSpeed);
+  });
   // Clicking any .tab element should hide all the .tab-content sections, and then reveal the single .tab-content section that is associated with the clicked .tab element.
   // So: You need to dynamically build a selector string with the correct ID, based on the data available to you on the .tab element that was clicked.
 
@@ -74,7 +91,7 @@ articleView.handleMainNav = function() {
   $('.main-nav .tab:first').click();
 };
 
-articleView.setTeasers = function() {
+articleView.setTeasers = function () {
   // REVIEW: Hide elements beyond the first 2 in any article body.
   $('.article-body *:nth-of-type(n+2)').hide();
 
@@ -83,8 +100,11 @@ articleView.setTeasers = function() {
 };
 
 // TODO: Call all of the above functions, once we are sure the DOM is ready.
-$(document).ready(function() {
+$(document).ready(function () {
   $('article.template').hide();
   articleView.populateFilters();
   articleView.handleAuthorFilter();
+  articleView.handleCategoryFilter();
+  articleView.handleMainNav();
+  // articleView.setTeasers();
 })
