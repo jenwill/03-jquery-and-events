@@ -27,6 +27,7 @@ A constructor function is used for the articles. Blog articles are stored as obj
 
 02-15-2018 9:25am - Forked and cloned repo, initial setup by duplicating starter code, adding README, normalize.css
 
+02-15-2018 10:10am - Added data-author attribute, called populateFilters method to add authors and categories to dropdown menus.
 
 
 ## Credits and Collaborations
