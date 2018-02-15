@@ -29,6 +29,7 @@ A constructor function is used for the articles. Blog articles are stored as obj
 
 02-15-2018 10:10am - Added data-author attribute, called populateFilters method to add authors and categories to dropdown menus.
 
+02-15-2018 11:05am - Finish handleAuthorFilter method, so articles by selected author fade in, and all articles fade in on reset.
 
 ## Credits and Collaborations
 
