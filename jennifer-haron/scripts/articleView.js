@@ -4,6 +4,7 @@ const fadeInSpeed = 750;
 let articleView = {};
 
 articleView.populateFilters = function () {
+  // each in this situation means 'run this function for each and every article element'
   $('article').each(function () {
     // REVIEW: We can declare several variables at once and assign their values later when using let. Keep in mind that we cannot do this with const.
     let authorName, category, optionTag;
@@ -46,7 +47,7 @@ articleView.handleAuthorFilter = function () {
       $('article').hide();
       $('article[data-author="' + $currentAuthor + '"]').fadeIn(fadeInSpeed);
 
-    } else {
+    }else {
       // DONE: If the <select> menu was changed to an option that is blank, we should first show all the articles, except the one article we are using as a template.
       $('article').fadeIn(fadeInSpeed);
       $('article.template').hide();
@@ -79,7 +80,7 @@ articleView.handleCategoryFilter = function () {
 
 articleView.handleMainNav = function () {
   // DONE: Add an event handler to .main-nav elements that will power the Tabs feature.
-  $('.main-nav .tab').on('click', function() {
+  $('.main-nav').on('click', '.tab', function () {
     $('.tab-content').hide();
     let $currentTab = $(this).data('content');
     $('section#' + $currentTab).fadeIn(fadeInSpeed);
@@ -91,20 +92,33 @@ articleView.handleMainNav = function () {
   $('.main-nav .tab:first').click();
 };
 
+// DONE: Add an event handler to reveal all the hidden elements, when the .read-on link is clicked. You can go ahead and hide the "Read On" link once it has been clicked. Be sure to prevent the default link-click action!
+// Ideally, we'd attach this as just one event handler on the #articles section, and let it process (in other words... delegate) any .read-on clicks that happen within child nodes.
 articleView.setTeasers = function () {
-  // REVIEW: Hide elements beyond the first 2 in any article body.
   $('.article-body *:nth-of-type(n+2)').hide();
-
-  // TODO: Add an event handler to reveal all the hidden elements, when the .read-on link is clicked. You can go ahead and hide the "Read On" link once it has been clicked. Be sure to prevent the default link-click action!
-  // Ideally, we'd attach this as just one event handler on the #articles section, and let it process (in other words... delegate) any .read-on clicks that happen within child nodes.
+  $('article').on('click', 'a.read-on', function () {
+    if ($(this).text() === 'Read on →') {
+      $(this).parent().find('*').fadeIn();
+      $(this).html('Show Less &larr;');
+    } else {
+      $('body').animate({
+        scrollTop: ($(this).parent().offset().top)
+      }, 200);
+      $(this).html('Read on &rarr;');
+      $(this).parent().find('.article-body *:nth-of-type(n+2)').hide();
+    }
+  });
 };
 
-// TODO: Call all of the above functions, once we are sure the DOM is ready.
+
+
+
+// DONE: Call all of the above functions, once we are sure the DOM is ready.
 $(document).ready(function () {
   $('article.template').hide();
   articleView.populateFilters();
   articleView.handleAuthorFilter();
   articleView.handleCategoryFilter();
   articleView.handleMainNav();
-  // articleView.setTeasers();
+  articleView.setTeasers();
 })
